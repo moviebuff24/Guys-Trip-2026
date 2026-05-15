@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026 Guys Trip</title>
+  <style>
+    :root {
+      --bg: #f0f2f5;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --header-bg: #1a1a2e;
+      --text: #1a1a2e;
+      --text-2: #4a5568;
+      --text-3: #6b7280;
+      --muted: #8892a4;
+      --accent: #f97316;
+      --green-bg: #d1fae5; --green-text: #065f46;
+      --amber-bg: #fef3c7; --amber-text: #92400e;
+      --red-bg:   #fee2e2; --red-text:   #991b1b;
+      --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); }
+
+    /* Header */
+    .site-header {
+      position: sticky; top: 0; z-index: 10;
+      background: var(--header-bg);
+      padding: 0 24px;
+      height: 58px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .header-title { color: #ffffff; font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+    .header-meta  { color: var(--muted); font-size: 13px; }
+
+    main { padding: 24px; }
+
+    /* Grid */
+    .trip-grid {
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 160px repeat(var(--trip-count, 4), 1fr);
+    }
+    .grid-row { display: contents; }
+
+    /* Label column */
+    .criteria-label {
+      background: #f8fafc;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      font-weight: 600;
+      font-size: 13px;
+      display: flex; align-items: center;
+      color: var(--text);
+    }
+    .criteria-label.corner { background: #f8fafc; }
+
+    /* Data cells */
+    .criteria-cell {
+      padding: 12px;
+      text-align: center;
+      font-size: 13px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2);
+    }
+    .criteria-cell:last-child { border-right: none; }
+    .criteria-cell.cell-green { background: var(--green-bg); color: var(--green-text); font-weight: 600; }
+    .criteria-cell.cell-amber { background: var(--amber-bg); color: var(--amber-text); font-weight: 600; }
+    .criteria-cell.cell-red   { background: var(--red-bg);   color: var(--red-text);   font-weight: 600; }
+
+    /* Photo header row */
+    .photo-corner { background: #f8fafc; border-right: 1px solid var(--border); border-bottom: 2px solid var(--border); }
+    .photo-cell {
+      position: relative; height: 150px; overflow: hidden;
+      border-right: 1px solid var(--border);
+      border-bottom: 2px solid var(--border);
+    }
+    .photo-cell:last-child { border-right: none; }
+    .photo-cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.65));
+      padding: 24px 10px 8px;
+    }
+    .photo-trip-name { color: #fff; font-weight: 700; font-size: 14px; line-height: 1.2; }
+    .photo-location  { color: rgba(255,255,255,0.75); font-size: 11px; margin-top: 2px; }
+
+    /* Notes row */
+    .notes-cell {
+      display: block;          /* override flex from .criteria-cell */
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--text-2);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .notes-cell:last-child { border-right: none; }
+    .notes-cell ul { padding-left: 14px; }
+    .notes-cell li { margin-bottom: 3px; line-height: 1.4; }
+
+    /* Links row */
+    .links-cell {
+      padding: 12px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      flex-wrap: wrap;
+    }
+    .links-cell:last-child { border-right: none; }
+    .trip-link {
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+    }
+    .trip-link:hover { text-decoration: underline; }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .site-header { flex-direction: column; height: auto; padding: 12px 16px; gap: 4px; text-align: center; }
+      main { padding: 12px; }
+      .trip-grid { grid-template-columns: 1fr; }
+      .grid-row { display: block; }
+      .criteria-label { display: none; }
+      .criteria-cell, .photo-cell, .notes-cell, .links-cell {
+        border-right: none;
+        text-align: left;
+      }
+      .photo-cell { height: 200px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <span class="header-title">2026 Guys Trip</span>
+    <span class="header-meta">5 guys · Ann Arbor &nbsp;·&nbsp; Aug 1–9, 2026 · 3–5 days</span>
+  </header>
+  <main id="grid-root">
+    <div class="trip-grid" id="trip-grid"></div>
+  </main>
+
+  <script>
+    /* ============================================================
+       TRIP DATA — edit only this section to update trip details
+       ============================================================ */
+    const TRIPS = [
+      {
+        name: "Kentucky Houseboat",
+        location: "Lake Cumberland, KY",
+        photo: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=300&fit=crop&auto=format",
+        driveTime: "6.5–7 hrs",
+        driveScore: "red",        // "green" | "amber" | "red"
+        costPerPerson: "~$560–600",
+        costScore: "red",
+        tripLength: "4 nights",
+        lodging: "Houseboat",
+        activities: "Swimming, fishing, tubing, water slides, wakeboarding",
+        novelty: "new",           // "new" | "done"
+        notes: [
+          "Discount season Aug 3–27: ~$1,900 rental = $380/person",
+          "Fuel NOT included — budget ~$100–150/day extra",
+          "State Dock provisioning: order groceries 2 weeks ahead",
+        ],
+        links: [
+          { label: "State Dock Marina", url: "https://statedock.com" },
+          { label: "Conley Bottom Resort", url: "https://conleybottom.com/watercraft-rentals/houseboat-rentals/family-cruiser/" },
+        ],
+      },
+      {
+        name: "Torch Lake",
+        location: "Northern Michigan",
+        photo: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=600&h=300&fit=crop&auto=format",
+        driveTime: "4 hrs",
+        driveScore: "green",
+        costPerPerson: "~$200–250",
+        costScore: "green",
+        tripLength: "3–4 nights",
+        lodging: "Lakefront cabin",
+        activities: "Swimming, pontoon rentals, fishing, kayaking, sandbar",
+        novelty: "new",
+        notes: [
+          "Caribbean-clear water — rated one of Michigan's best lakes",
+          "Pontoon rentals ~$315–330/day; kayak rentals available",
+          "Easiest drive of any option — 4 hrs, no flight needed",
+        ],
+        links: [
+          { label: "Search VRBO", url: "https://www.vrbo.com/vacation-rentals/usa/michigan/northern-michigan/torch-lake" },
+        ],
+      },
+      {
+        name: "Smoky Mtn Cabin",
+        location: "Great Smoky Mountains, TN",
+        photo: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=600&h=300&fit=crop&auto=format",
+        driveTime: "9–10 hrs (fly)",
+        driveScore: "red",
+        costPerPerson: "~$530–710",
+        costScore: "red",
+        tripLength: "3–4 nights",
+        lodging: "Private cabin",
+        activities: "Hiking, campfire, whitewater rafting, Gatlinburg",
+        novelty: "new",
+        notes: [
+          "Requires flying — DTW→TYS ~$260 round-trip/person",
+          "Cabin alone: $1,350–2,250 for the group",
+          "Exceeds $450/person budget once flights are included",
+        ],
+        links: [
+          { label: "Search Airbnb", url: "https://www.airbnb.com/s/Great-Smoky-Mountains--TN/homes" },
+        ],
+      },
+      {
+        name: "East Coast Beach",
+        location: "Outer Banks, NC",
+        photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=300&fit=crop&auto=format",
+        driveTime: "11 hrs (fly)",
+        driveScore: "red",
+        costPerPerson: "~$400–500+",
+        costScore: "red",
+        tripLength: "4 nights",
+        lodging: "Beach house",
+        activities: "Swimming, surfing, kayaking, fishing piers",
+        novelty: "new",
+        notes: [
+          "Requires flying — adds $200–300/person before lodging",
+          "OBX has large group homes; Myrtle Beach is cheaper",
+          "Would need rental car from airport — adds cost",
+        ],
+        links: [
+          { label: "Search VRBO", url: "https://www.vrbo.com/vacation-rentals/north-carolina/outer-banks" },
+        ],
+      },
+    ];
+    /* ============================================================ */
+
+    function colorClass(score) {
+      return score === 'green' ? 'cell-green' : score === 'amber' ? 'cell-amber' : 'cell-red';
+    }
+
+    function noveltyClass(val) { return val === 'new' ? 'cell-green' : 'cell-amber'; }
+    function noveltyLabel(val) { return val === 'new' ? 'New experience' : 'Done before'; }
+
+    function renderGrid() {
+      const grid = document.getElementById('trip-grid');
+      grid.style.setProperty('--trip-count', TRIPS.length);
+
+      // --- Photo header row ---
+      const photoRow = document.createElement('div');
+      photoRow.className = 'grid-row';
+      photoRow.innerHTML = `<div class="photo-corner criteria-label corner"></div>` +
+        TRIPS.map(t => `
+          <div class="photo-cell">
+            <img src="${t.photo}" alt="${t.name}" loading="lazy">
+            <div class="photo-overlay">
+              <div class="photo-trip-name">${t.name}</div>
+              <div class="photo-location">${t.location}</div>
+            </div>
+          </div>`).join('');
+      grid.appendChild(photoRow);
+
+      // --- Criteria rows ---
+      function addRow(label, cellsFn) {
+        const row = document.createElement('div');
+        row.className = 'grid-row';
+        row.innerHTML = `<div class="criteria-label">${label}</div>` + TRIPS.map(cellsFn).join('');
+        grid.appendChild(row);
+      }
+
+      addRow('Drive Time', t =>
+        `<div class="criteria-cell ${colorClass(t.driveScore)}">${t.driveTime}</div>`);
+
+      addRow('Est. Cost / Person', t =>
+        `<div class="criteria-cell ${colorClass(t.costScore)}">${t.costPerPerson}</div>`);
+
+      addRow('Trip Length', t =>
+        `<div class="criteria-cell">${t.tripLength}</div>`);
+
+      addRow('Lodging', t =>
+        `<div class="criteria-cell">${t.lodging}</div>`);
+
+      addRow('Activities', t =>
+        `<div class="criteria-cell" style="font-size:11px; line-height:1.4;">${t.activities}</div>`);
+
+      addRow('Novelty', t =>
+        `<div class="criteria-cell ${noveltyClass(t.novelty)}">${noveltyLabel(t.novelty)}</div>`);
+
+      // --- Notes row ---
+      const notesRow = document.createElement('div');
+      notesRow.className = 'grid-row';
+      notesRow.innerHTML = `<div class="criteria-label">Notes</div>` +
+        TRIPS.map(t => `
+          <div class="criteria-cell notes-cell">
+            <ul>${t.notes.map(n => `<li>${n}</li>`).join('')}</ul>
+          </div>`).join('');
+      grid.appendChild(notesRow);
+
+      // --- Links row ---
+      const linksRow = document.createElement('div');
+      linksRow.className = 'grid-row';
+      linksRow.innerHTML = `<div class="criteria-label">Links</div>` +
+        TRIPS.map(t => `
+          <div class="criteria-cell links-cell">
+            ${t.links.map(l => `<a class="trip-link" href="${l.url}" target="_blank" rel="noopener">${l.label} ↗</a>`).join('')}
+          </div>`).join('');
+      grid.appendChild(linksRow);
+    }
+
+    renderGrid();
+  </script>
+</body>
+</html>
