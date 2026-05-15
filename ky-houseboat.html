@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kentucky Houseboat — 2026 Guys Trip</title>
+  <style>
+    :root {
+      --bg: #f0f2f5; --surface: #ffffff;
+      --border: #e2e8f0; --border-soft: #f1f5f9;
+      --text: #1a1a2e; --text-2: #4a5568; --text-3: #6b7280; --muted: #8892a4;
+      --header-bg: #1a1a2e;
+      --accent: #f97316; --accent-dark: #ea580c; --accent-bg: #fff7ed; --accent-text: #c2410c;
+      --shadow: 0 1px 4px rgba(0,0,0,.08);
+      --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
+      --header-h: 58px;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); }
+
+    /* Header */
+    header {
+      background: var(--header-bg); color: white;
+      height: var(--header-h); padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .back-btn {
+      color: var(--muted); font-size: 0.78rem; text-decoration: none;
+      display: flex; align-items: center; gap: 5px;
+      transition: color 0.15s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-title { font-size: 1rem; font-weight: 600; }
+    .header-badge {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; background: var(--accent-bg); color: var(--accent-text);
+      padding: 2px 8px; border-radius: 4px;
+    }
+
+    /* Page body */
+    .page { max-width: 740px; margin: 0 auto; padding: 28px 20px 48px; }
+
+    /* Hero */
+    .hero {
+      position: relative; height: 340px; border-radius: var(--r-lg);
+      overflow: hidden; margin-bottom: 20px;
+    }
+    .hero img { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.68) 100%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 24px;
+    }
+    .hero-label {
+      color: rgba(255,255,255,0.75); font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .hero-title { color: #fff; font-size: 1.7rem; font-weight: 800; line-height: 1.1; margin-bottom: 5px; }
+    .hero-sub { color: rgba(255,255,255,0.85); font-size: 0.82rem; }
+
+    /* Stats strip */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: var(--surface); border-radius: var(--r-lg);
+      overflow: hidden; box-shadow: var(--shadow); margin-bottom: 20px;
+    }
+    .stat { padding: 14px 12px; text-align: center; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat-val { font-size: 1.1rem; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 4px; }
+    .stat-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* Section cards */
+    .section-card {
+      background: var(--surface); border-radius: var(--r-lg);
+      box-shadow: var(--shadow); padding: 22px 26px; margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--muted); margin-bottom: 16px;
+    }
+
+    /* Booking steps */
+    .steps { display: flex; flex-direction: column; gap: 14px; }
+    .step { display: flex; gap: 13px; align-items: flex-start; }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-size: 0.72rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .step-body h4 { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .step-body p { font-size: 0.78rem; color: var(--text-2); line-height: 1.45; }
+    .step-link { font-size: 0.72rem; color: var(--accent); text-decoration: none; }
+    .step-link:hover { text-decoration: underline; }
+
+    /* Cost breakdown */
+    .cost-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0; border-bottom: 1px solid var(--border-soft); font-size: 0.82rem;
+    }
+    .cost-row:last-of-type { border-bottom: none; }
+    .cost-label { color: var(--text-2); }
+    .cost-val { font-weight: 600; color: var(--text); }
+    .cost-row.total .cost-label { font-weight: 700; color: var(--text); }
+    .cost-row.total .cost-val { color: var(--accent); font-size: 0.95rem; }
+    .cost-note { font-size: 0.72rem; color: var(--muted); margin-top: 10px; font-style: italic; }
+
+    /* Itinerary */
+    .day { display: flex; gap: 16px; margin-bottom: 16px; align-items: flex-start; }
+    .day:last-child { margin-bottom: 0; }
+    .day-label {
+      flex-shrink: 0; width: 44px;
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 1px;
+    }
+    .day-dow {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent); line-height: 1;
+    }
+    .day-date {
+      font-size: 0.72rem; font-weight: 600; color: var(--accent);
+      white-space: nowrap; margin-top: 3px;
+    }
+    .day-content h4 { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .day-content p { font-size: 0.78rem; color: var(--text-2); line-height: 1.45; }
+
+    /* Packing list */
+    .pack-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 24px; }
+    .pack-item {
+      font-size: 0.78rem; color: var(--text-2);
+      display: flex; gap: 7px; align-items: center;
+    }
+    .pack-item::before { content: "☐"; color: #cbd5e1; font-size: 0.9rem; flex-shrink: 0; }
+
+    /* Coupon callout */
+    .coupon-banner {
+      background: var(--accent-bg); border: 1px solid #fed7aa;
+      border-radius: var(--r-md); padding: 12px 16px;
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .coupon-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .coupon-body { flex: 1; }
+    .coupon-body p { font-size: 0.78rem; color: var(--accent-text); line-height: 1.4; }
+    .coupon-code {
+      display: inline-block; font-family: monospace; font-size: 0.9rem; font-weight: 700;
+      color: var(--accent); background: #fff; border: 1.5px dashed var(--accent);
+      border-radius: var(--r-sm); padding: 2px 10px; margin-top: 4px; letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a class="back-btn" href="guys-trip-comparison.html">← Back to comparison</a>
+    <span class="header-title">Kentucky Houseboat</span>
+  </div>
+  <span class="header-badge">Our Pick</span>
+</header>
+
+<div class="page">
+
+  <div class="hero">
+    <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6MTE1NjYxMDI2NDcwNjY2ODkxMA==/original/0664c757-9deb-4c77-a10b-fdaef4ef250e.jpeg?im_w=720" alt="Lake Cumberland Houseboat">
+    <div class="hero-overlay">
+      <div class="hero-label">2026 Guys Trip · Our Pick</div>
+      <div class="hero-title">Kentucky Houseboat</div>
+      <div class="hero-sub">Lake Cumberland · State Dock Marina · Aug 6–10</div>
+    </div>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat"><div class="stat-val">DTW→BNA</div><div class="stat-lbl">Flight</div></div>
+    <div class="stat"><div class="stat-val">5 days</div><div class="stat-lbl">Trip Length</div></div>
+    <div class="stat"><div class="stat-val">~$825+</div><div class="stat-lbl">Per Person</div></div>
+    <div class="stat"><div class="stat-val">Aug 6–10</div><div class="stat-lbl">Dates</div></div>
+  </div>
+
+  <div class="coupon-banner">
+    <div class="coupon-icon">🎟</div>
+    <div class="coupon-body">
+      <p><strong>25% off coupon applied</strong> — brings houseboat from $2,600 → $1,985 ($123 savings per person). Enter at checkout:</p>
+      <div class="coupon-code">save25fun</div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">Booking Steps</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Book flights</h4>
+          <p>Detroit (DTW) → Nashville (BNA). Target Wednesday Aug 6 outbound, Sunday Aug 10 return. Book early — August weekends fill fast. <a class="step-link" href="https://www.google.com/travel/flights/s/JeKRkXQPaHAzTifBA" target="_blank">Search flights →</a></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Reserve the houseboat</h4>
+          <p>Book directly through State Dock. Confirm Aug 7–10 (Thu pickup, Sun return). Deposit required at booking. Apply coupon <strong>save25fun</strong> at checkout. <a class="step-link" href="https://statedock.suntexwatersports.com/details/1532?departure=08/06/2026&time_period=6800&time_id=6457_1#search_heading" target="_blank">View this boat →</a></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Book Nashville hotel</h4>
+          <p>One night Wed Aug 6 — downtown near Broadway. Split 5 ways. Book somewhere with easy parking for the drive out Thursday.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Reserve rental car</h4>
+          <p>Pick up at BNA on arrival. Need to fit 5 guys + gear for the ~2.5 hr drive to Lake Cumberland Thursday morning.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <h4>Order groceries (optional)</h4>
+          <p>State Dock provisioning service — order food and drinks online 2 weeks before. Delivered to the boat on pickup day.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">Cost Breakdown · Per Person (5 guys)</div>
+    <div class="cost-row"><span class="cost-label">Houseboat rental — State Dock Marina ($1,985 ÷ 5 w/ save25fun)</span><span class="cost-val">$397</span></div>
+    <div class="cost-row"><span class="cost-label">Flights DTW → BNA (est.)</span><span class="cost-val">~$175–250</span></div>
+    <div class="cost-row"><span class="cost-label">Nashville hotel (1 night ÷ 5)</span><span class="cost-val">~$50–70</span></div>
+    <div class="cost-row"><span class="cost-label">Rental car (1 car, 2 days ÷ 5)</span><span class="cost-val">~$30–40</span></div>
+    <div class="cost-row"><span class="cost-label">Boat fuel (~$125/day × 3 days ÷ 5)</span><span class="cost-val">~$75</span></div>
+    <div class="cost-row"><span class="cost-label">Food & drinks (est.)</span><span class="cost-val">~$100–150</span></div>
+    <div class="cost-row total"><span class="cost-label">Total per person (est.)</span><span class="cost-val">~$825–980</span></div>
+    <p class="cost-note">* Lock in flights first — that's the biggest variable. Discount season runs Aug 3–27 so we're in the right window.</p>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">Itinerary</div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Wed</div><div class="day-date">Aug 6</div></div>
+      <div class="day-content"><h4>Fly in — Nashville night</h4><p>Fly DTW→BNA. Check into hotel. Hit Broadway for dinner and drinks — it's Nashville, lean into it.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Thu</div><div class="day-date">Aug 7</div></div>
+      <div class="day-content"><h4>Drive to Lake Cumberland — Board</h4><p>Morning drive from Nashville to State Dock Marina (~2.5 hrs). Board the houseboat, stock up on supplies, and get out on the water.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Fri</div><div class="day-date">Aug 8</div></div>
+      <div class="day-content"><h4>Full day on the lake</h4><p>Port hop, find a cove, swim off the back. Float in the afternoon. Sunset cookout on the deck.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Sat</div><div class="day-date">Aug 9</div></div>
+      <div class="day-content"><h4>Full day on the lake</h4><p>Rent jet skis from the marina. Explore more of the lake's 1,200 miles of shoreline. Last night on the water.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Sun</div><div class="day-date">Aug 10</div></div>
+      <div class="day-content"><h4>Return boat — fly home</h4><p>Return houseboat to State Dock. Drive back to Nashville (~2.5 hrs). Catch flight home from BNA.</p></div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">What to Bring</div>
+    <div class="pack-cols">
+      <div class="pack-item">Swimsuit (pack 2)</div>
+      <div class="pack-item">Food & drinks (or pre-order)</div>
+      <div class="pack-item">Towels</div>
+      <div class="pack-item">Cash for fuel & tips</div>
+      <div class="pack-item">Sunscreen (lots)</div>
+      <div class="pack-item">Phone charger + power bank</div>
+      <div class="pack-item">Sunglasses + hat</div>
+      <div class="pack-item">Toiletries (toothbrush, deodorant, etc.)</div>
+      <div class="pack-item">Floaties / pool toys</div>
+      <div class="pack-item">Aloe / sunburn relief</div>
+      <div class="pack-item">One nice going-out outfit</div>
+      <div class="pack-item">Ibuprofen + basic meds</div>
+      <div class="pack-item">Water shoes / flip flops</div>
+      <div class="pack-item">Motion sickness meds (just in case)</div>
+      <div class="pack-item">Bluetooth speaker</div>
+      <div class="pack-item">Change of clothes for travel days</div>
+      <div class="pack-item">Cards + travel games</div>
+      <div class="pack-item">ID + cards</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
