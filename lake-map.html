@@ -221,7 +221,7 @@
   const stops = [
     { id:'dock', ll:[36.9155,-85.0505], label:'⚓', color:'#1a1a2e', big:true,
       title:'State Dock Marina', dayLabel:'Start / Finish', dayColor:'#1a1a2e',
-      desc:'Board Thu ~3pm (off the dock by 6). Load ice, food and drinks at the Ship Store — the biggest on the lake. Return by 11am Sunday.' },
+      desc:'Board Thu ~3pm (off the dock by 6). Load ice, food and drinks at the Ship Store — the biggest on the lake. Two restaurants right here (Tiki Bar &amp; Grill and The Wheelhouse) for a first-day or last-day meal. Return by 11am Sunday.' },
     { id:'thu', ll:[36.892,-85.072], label:'1', color:C.thu, big:true,
       title:'Thu Night — Quiet Cove', dayLabel:'Thu · Aug 7', dayColor:C.thu,
       desc:'Short shakedown cruise off the dock. Nose into a quiet cove near the dam, tie off to the bank, grill dinner. Night 1 = total seclusion.' },
@@ -239,7 +239,10 @@
       desc:'Quiet and calm even on peak weekends, with cliff-lined limestone shores — this is our bluff-jumping spot for whoever\'s up for it. Also the fuel + pump-out marina, so we top off here for the easy Sunday cruise home.' },
     { id:'jamestown', ll:[36.9383,-85.0478], label:'⚓', color:'#6b7280', big:false,
       title:'Jamestown Marina (Safe Harbor)', dayLabel:'Marina', dayColor:'#6b7280',
-      desc:'Full-service marina just up the shore from State Dock — fuel, ship store, restaurant. Handy backup for a supply run.' },
+      desc:'Full-service marina just up the shore from State Dock — fuel, ship store, and a restaurant. An easy boat-in lunch for the Saturday marina run, or a backup supply stop.' },
+    { id:'sidbell', ll:[36.8077,-85.0273], label:'💧', color:'#6b7280', big:false,
+      title:'Sid Bell Falls', dayLabel:'Scenic', dayColor:'#6b7280',
+      desc:'A 5-ft waterfall where Hancock Creek spills into the lake, boat-access only — and close to State Dock. The easy waterfall stop if the 76 Falls run feels like too much cruising.' },
     { id:'mystery', ll:[36.8240,-84.9386], label:'💧', color:'#6b7280', big:false,
       title:'Mystery Falls', dayLabel:'Scenic', dayColor:'#6b7280',
       desc:'A ~50-ft waterfall hidden in a short cove, reachable only by boat. A quieter second-waterfall option on the Beaver Creek side of the lake.' },
@@ -253,20 +256,19 @@
 
   const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
     attribution: 'Imagery &copy; Esri', maxZoom: 18
-  }).addTo(map);
+  });
   const labels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
     maxZoom: 18, opacity: 0.9
-  }).addTo(map);
+  });
   const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap', maxZoom: 19
-  });
+  }).addTo(map);
 
   const satGroup = L.layerGroup([sat, labels]);
   L.control.layers(
-    { 'Satellite': satGroup, 'Street map': street },
+    { 'Street map': street, 'Satellite': satGroup },
     null, { position: 'topright', collapsed: false }
   ).addTo(map);
-  satGroup.addTo(map);
 
   function icon(color, label, small) {
     return L.divIcon({ className: '', html: `<div class="pin${small ? ' small' : ''}" style="background:${color}">${label}</div>`,
@@ -291,7 +293,7 @@
   line([P.beaver, P.dock], C.sun);                 // Sun
 
   // Fit to the core route (leave Clifty off-frame; it's the far optional)
-  const core = ['dock','jamestown','thu','falls','fri','harmon','beaver','mystery','dam'].map(id => P[id]);
+  const core = ['dock','jamestown','thu','falls','fri','harmon','beaver','sidbell','mystery','dam'].map(id => P[id]);
   map.fitBounds(L.latLngBounds(core), { padding: [40, 40] });
 
   // --- Build the stop legend from the same data ---
