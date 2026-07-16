@@ -36,6 +36,24 @@
 
     main { padding: 24px; }
 
+    /* Picked-trip banner */
+    .pick-banner {
+      background: var(--header-bg);
+      border-radius: var(--r-lg);
+      padding: 14px 20px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .pick-label { color: #fff; font-size: 14px; font-weight: 600; }
+    .pick-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .pick-links a {
+      color: var(--accent); font-size: 13px; font-weight: 600;
+      text-decoration: none; white-space: nowrap;
+    }
+    .pick-links a:hover { text-decoration: underline; }
+
     /* Grid */
     .trip-grid {
       background: var(--surface);
@@ -144,6 +162,13 @@
     <span class="header-meta">5 guys · Ann Arbor &nbsp;·&nbsp; Aug 1–9, 2026 · 3–5 days</span>
   </header>
   <main id="grid-root">
+    <div class="pick-banner">
+      <span class="pick-label">✅ We're going with the Kentucky Houseboat</span>
+      <span class="pick-links">
+        <a href="ky-houseboat.html">Trip details →</a>
+        <a href="lake-map.html">🗺️ Route map →</a>
+      </span>
+    </div>
     <div class="trip-grid" id="trip-grid"></div>
   </main>
 
