@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lake Cumberland Route — 2026 Guys Trip</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <style>
+    :root {
+      --bg: #f0f2f5; --surface: #ffffff;
+      --border: #e2e8f0; --border-soft: #f1f5f9;
+      --text: #1a1a2e; --text-2: #4a5568; --text-3: #6b7280; --muted: #8892a4;
+      --header-bg: #1a1a2e;
+      --accent: #f97316; --accent-dark: #ea580c; --accent-bg: #fff7ed; --accent-text: #c2410c;
+      --shadow: 0 1px 4px rgba(0,0,0,.08);
+      --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
+      --header-h: 58px;
+      /* Day route colors */
+      --thu: #3b82f6; --fri: #f97316; --sat: #8b5cf6; --sun: #10b981;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); }
+
+    /* Header */
+    header {
+      background: var(--header-bg); color: white;
+      height: var(--header-h); padding: 0 28px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 1000;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .back-btn {
+      color: var(--muted); font-size: 0.78rem; text-decoration: none;
+      display: flex; align-items: center; gap: 5px; transition: color 0.15s;
+    }
+    .back-btn:hover { color: #fff; }
+    .header-title { font-size: 1rem; font-weight: 600; }
+    .header-badge {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; background: var(--accent-bg); color: var(--accent-text);
+      padding: 2px 8px; border-radius: 4px;
+    }
+
+    .page { max-width: 900px; margin: 0 auto; padding: 24px 20px 48px; }
+    .intro { font-size: 0.9rem; color: var(--text-2); line-height: 1.5; margin-bottom: 18px; }
+    .intro strong { color: var(--text); }
+
+    /* Map */
+    #map {
+      height: 500px; width: 100%;
+      border-radius: var(--r-lg); box-shadow: var(--shadow);
+      margin-bottom: 8px; z-index: 1;
+    }
+    .map-note { font-size: 0.72rem; color: var(--muted); font-style: italic; margin-bottom: 22px; }
+
+    /* Day legend chips */
+    .day-key { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 22px; }
+    .day-key-item { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-2); }
+    .day-swatch { width: 22px; height: 4px; border-radius: 2px; flex-shrink: 0; }
+
+    /* Map pin markers */
+    .pin {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 0.82rem;
+      border: 2.5px solid #fff; box-shadow: 0 1px 5px rgba(0,0,0,.45);
+    }
+    .pin.small { width: 22px; height: 22px; font-size: 0.68rem; opacity: 0.92; }
+    .leaflet-popup-content { font-family: var(--font); font-size: 0.8rem; line-height: 1.45; color: var(--text-2); margin: 12px 14px; }
+    .leaflet-popup-content b { color: var(--text); font-size: 0.85rem; display: block; margin-bottom: 4px; }
+    .leaflet-popup-content .pop-day {
+      display: inline-block; font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; padding: 1px 6px; border-radius: 4px; margin-bottom: 6px; color: #fff;
+    }
+
+    /* Section cards */
+    .section-card {
+      background: var(--surface); border-radius: var(--r-lg);
+      box-shadow: var(--shadow); padding: 22px 26px; margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.09em; color: var(--muted); margin-bottom: 16px;
+    }
+
+    /* Itinerary days */
+    .day { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+    .day:last-child { margin-bottom: 0; }
+    .day-label { flex-shrink: 0; width: 46px; display: flex; flex-direction: column; align-items: center; padding-top: 1px; }
+    .day-dow { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1; }
+    .day-date { font-size: 0.72rem; font-weight: 600; white-space: nowrap; margin-top: 3px; }
+    .day-content h4 { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .day-content p { font-size: 0.8rem; color: var(--text-2); line-height: 1.5; }
+    .day-content p + p { margin-top: 5px; }
+    .day.thu .day-dow, .day.thu .day-date { color: var(--thu); }
+    .day.fri .day-dow, .day.fri .day-date { color: var(--fri); }
+    .day.sat .day-dow, .day.sat .day-date { color: var(--sat); }
+    .day.sun .day-dow, .day.sun .day-date { color: var(--sun); }
+    .tag {
+      display: inline-block; font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; padding: 1px 6px; border-radius: 4px; margin-left: 6px; vertical-align: 1px;
+      background: var(--accent-bg); color: var(--accent-text);
+    }
+
+    /* Test callout */
+    .callout {
+      background: var(--accent-bg); border: 1px solid #fed7aa;
+      border-radius: var(--r-md); padding: 16px 18px; margin-bottom: 16px;
+    }
+    .callout h4 { font-size: 0.82rem; color: var(--accent-text); margin-bottom: 6px; }
+    .callout p { font-size: 0.8rem; color: var(--accent-text); line-height: 1.5; }
+
+    /* Stop legend list */
+    .stop-row { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--border-soft); }
+    .stop-row:last-child { border-bottom: none; }
+    .stop-dot {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; margin-top: 1px;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 0.72rem; border: 2px solid #fff; box-shadow: var(--shadow);
+    }
+    .stop-body h4 { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+    .stop-body p { font-size: 0.76rem; color: var(--text-2); line-height: 1.45; }
+
+    @media (max-width: 560px) {
+      #map { height: 380px; }
+      .section-card { padding: 18px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <a class="back-btn" href="ky-houseboat.html">← Back to houseboat</a>
+    <span class="header-title">Lake Cumberland — Our Route</span>
+  </div>
+  <span class="header-badge">3 Nights on the Water</span>
+</header>
+
+<div class="page">
+
+  <p class="intro">
+    Our float plan for <strong>Aug 7–10</strong>, built around the lower lake near <strong>State Dock</strong> — so
+    we're not burning days cruising 100 miles. The plan front-loads a <strong>secluded-cove night</strong> and a
+    <strong>marina/party-cove sample</strong> so we figure out early which vibe we actually want. Tap any pin for details.
+  </p>
+
+  <div id="map"></div>
+  <p class="map-note">Route lines are straight-line sketches, not exact boat paths. Cove anchors are suggested zones — we'll pick the actual spot on the water (and State Dock staff will know which coves are quiet vs. packed that weekend).</p>
+
+  <div class="day-key">
+    <div class="day-key-item"><span class="day-swatch" style="background:var(--thu)"></span> Thu — board &amp; disappear</div>
+    <div class="day-key-item"><span class="day-swatch" style="background:var(--fri)"></span> Fri — adventure day</div>
+    <div class="day-key-item"><span class="day-swatch" style="background:var(--sat)"></span> Sat — float &amp; sample</div>
+    <div class="day-key-item"><span class="day-swatch" style="background:var(--sun)"></span> Sun — cruise home</div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">Day by Day</div>
+
+    <div class="day thu">
+      <div class="day-label"><div class="day-dow">Thu</div><div class="day-date">Aug 7</div></div>
+      <div class="day-content">
+        <h4>Board &amp; disappear <span class="tag">Cove test · night 1</span></h4>
+        <p>Check in at State Dock ~3pm, load ice, food and drinks at the Ship Store (biggest on the lake), and get off the dock before the 6pm cutoff. Short shakedown cruise to a quiet cove near the dam — nose into the bank, tie off to the trees, grill dinner.</p>
+        <p>Night one is <strong>pure seclusion</strong>. That's half our cove-vs-marina experiment done on day one.</p>
+      </div>
+    </div>
+
+    <div class="day fri">
+      <div class="day-label"><div class="day-dow">Fri</div><div class="day-date">Aug 8</div></div>
+      <div class="day-content">
+        <h4>Adventure day — 76 Falls</h4>
+        <p>Cruise down to <strong>Seventy-Six Falls</strong>, a houseboat-accessible waterfall — swim, explore, cool off under it. <strong>Don't jump the falls themselves</strong> — the rocks are slick and people have died there. For the cliff-jumping crowd, the bluffs around our anchor cove do the job (nothing crazy). Anchor a scenic cove nearby for the night with a sunset cookout.</p>
+      </div>
+    </div>
+
+    <div class="day sat">
+      <div class="day-label"><div class="day-dow">Sat</div><div class="day-date">Aug 9</div></div>
+      <div class="day-content">
+        <h4>Float day + the marina test</h4>
+        <p>Big lazy swim-and-float day off the back of the boat. Drift back north toward the dock and, if we're curious, swing through <strong>Harmon Creek</strong> — the lake's big raft-up party cove — and/or grab a boat-in meal at a marina. Now we've seen both sides.</p>
+        <p>Last night we anchor at <strong>Beaver Creek</strong>: quiet, cliff-lined, and it's the fuel + pump-out marina — so we top off here and it's an easy morning cruise back Sunday.</p>
+      </div>
+    </div>
+
+    <div class="day sun">
+      <div class="day-label"><div class="day-dow">Sun</div><div class="day-date">Aug 10</div></div>
+      <div class="day-content">
+        <h4>Cruise home</h4>
+        <p>Short morning cruise from Beaver Creek back to State Dock, return the boat by 11am, then drive to BNA and fly home.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h4>🧭 The cove-vs-marina test, built in</h4>
+    <p>We spend night 1 totally on our own in a quiet cove, then Saturday we sample the busier marina/party-cove scene before committing our last night. By Saturday evening we'll know exactly which one we are — with zero risk, since we're anchored on our own terms the whole time.</p>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">The Stops</div>
+    <div id="stop-legend"></div>
+  </div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+  const C = {
+    thu: getComputedStyle(document.documentElement).getPropertyValue('--thu').trim(),
+    fri: getComputedStyle(document.documentElement).getPropertyValue('--fri').trim(),
+    sat: getComputedStyle(document.documentElement).getPropertyValue('--sat').trim(),
+    sun: getComputedStyle(document.documentElement).getPropertyValue('--sun').trim(),
+  };
+
+  // --- Stops (coords are best-estimate; anchors are suggested zones) ---
+  const stops = [
+    { id:'dock', ll:[36.9155,-85.0505], label:'⚓', color:'#1a1a2e', big:true,
+      title:'State Dock Marina', dayLabel:'Start / Finish', dayColor:'#1a1a2e',
+      desc:'Board Thu ~3pm (off the dock by 6). Load ice, food and drinks at the Ship Store — the biggest on the lake. Return by 11am Sunday.' },
+    { id:'thu', ll:[36.892,-85.072], label:'1', color:C.thu, big:true,
+      title:'Thu Night — Quiet Cove', dayLabel:'Thu · Aug 7', dayColor:C.thu,
+      desc:'Short shakedown cruise off the dock. Nose into a quiet cove near the dam, tie off to the bank, grill dinner. Night 1 = total seclusion.' },
+    { id:'falls', ll:[36.7800,-85.1260], label:'2', color:C.fri, big:true,
+      title:'76 Falls — Adventure Day', dayLabel:'Fri · Aug 8', dayColor:C.fri,
+      desc:'Seventy-Six Falls, a houseboat-accessible waterfall. Swim and explore. Heads up: the falls are slick and NOT safe to jump — look, don\'t leap.' },
+    { id:'fri', ll:[36.802,-85.104], label:'3', color:C.fri, big:true,
+      title:'Fri Night — Scenic Cove', dayLabel:'Fri · Aug 8', dayColor:C.fri,
+      desc:'Anchor a cliff-lined cove near the falls. Bluff jumping here for whoever\'s up for it (nothing crazy). Sunset cookout on the deck.' },
+    { id:'harmon', ll:[36.9130,-84.9290], label:'4', color:C.sat, big:true,
+      title:'Harmon Creek — The Party Cove', dayLabel:'Sat · Aug 9 (optional)', dayColor:C.sat,
+      desc:'The lake\'s big raft-up scene — boats tied together, music, going all evening. Cruise through to sample it, or skip it to stay solo.' },
+    { id:'beaver', ll:[36.8620,-84.9790], label:'5', color:C.sat, big:true,
+      title:'Beaver Creek — Last Night + Fuel', dayLabel:'Sat · Aug 9', dayColor:C.sat,
+      desc:'Quiet, steep cliffs, calm even on peak weekends. Also the fuel + pump-out marina — top off here so Sunday\'s return cruise is easy.' },
+    { id:'dam', ll:[36.8665,-85.1450], label:'🏞', color:'#6b7280', big:false,
+      title:'Wolf Creek Dam', dayLabel:'Landmark', dayColor:'#6b7280',
+      desc:'The dam that made the lake — marks the west end right by State Dock. Scenic orientation point, not a stop.' },
+    { id:'clifty', ll:[37.0240,-84.7065], label:'🧗', color:'#94a3b8', big:false,
+      title:'Clifty Creek (optional)', dayLabel:'Only if...', dayColor:'#94a3b8',
+      desc:'The lake\'s known cliff-jumping bluffs — but ~20 lake miles up from State Dock. Only worth it if we want to burn a day cruising up-lake. Otherwise our own coves have plenty of bluffs.' },
+  ];
+
+  // --- Map ---
+  const map = L.map('map', { scrollWheelZoom: false });
+
+  const sat = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Imagery &copy; Esri', maxZoom: 18
+  }).addTo(map);
+  const labels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+    maxZoom: 18, opacity: 0.9
+  }).addTo(map);
+  const street = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap', maxZoom: 19
+  });
+
+  const satGroup = L.layerGroup([sat, labels]);
+  L.control.layers(
+    { 'Satellite': satGroup, 'Street map': street },
+    null, { position: 'topright', collapsed: false }
+  ).addTo(map);
+  satGroup.addTo(map);
+
+  function icon(color, label, small) {
+    return L.divIcon({ className: '', html: `<div class="pin${small ? ' small' : ''}" style="background:${color}">${label}</div>`,
+      iconSize: small ? [22,22] : [30,30], iconAnchor: small ? [11,11] : [15,15] });
+  }
+
+  stops.forEach(s => {
+    L.marker(s.ll, { icon: icon(s.color, s.label, !s.big) })
+      .addTo(map)
+      .bindPopup(`<span class="pop-day" style="background:${s.dayColor}">${s.dayLabel}</span><b>${s.title}</b>${s.desc}`);
+  });
+
+  // --- Day route lines ---
+  const P = Object.fromEntries(stops.map(s => [s.id, s.ll]));
+  function line(pts, color, dashed) {
+    L.polyline(pts, { color, weight: 4, opacity: 0.85, dashArray: dashed ? '2,9' : null, lineCap: 'round' }).addTo(map);
+  }
+  line([P.dock, P.thu], C.thu);                    // Thu
+  line([P.thu, P.falls, P.fri], C.fri);            // Fri
+  line([P.fri, P.beaver], C.sat);                  // Sat (main)
+  line([P.beaver, P.harmon], C.sat, true);         // Sat (optional party-cove spur)
+  line([P.beaver, P.dock], C.sun);                 // Sun
+
+  // Fit to the core route (leave Clifty off-frame; it's the far optional)
+  const core = ['dock','thu','falls','fri','harmon','beaver','dam'].map(id => P[id]);
+  map.fitBounds(L.latLngBounds(core), { padding: [40, 40] });
+
+  // --- Build the stop legend from the same data ---
+  const legend = document.getElementById('stop-legend');
+  stops.forEach(s => {
+    const row = document.createElement('div');
+    row.className = 'stop-row';
+    row.innerHTML = `<div class="stop-dot" style="background:${s.color}">${s.label}</div>
+      <div class="stop-body"><h4>${s.title}</h4><p>${s.desc}</p></div>`;
+    legend.appendChild(row);
+  });
+</script>
+</body>
+</html>
