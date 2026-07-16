@@ -148,7 +148,7 @@
   </p>
 
   <div id="map"></div>
-  <p class="map-note">Numbered pins are our stops; gray pins are marinas &amp; scenic spots along the way (not overnight stops). Route lines are straight-line sketches, not exact boat paths, and cove anchors are suggested zones — we'll pick the actual spot on the water (and State Dock staff will know which coves are quiet vs. packed that weekend).</p>
+  <p class="map-note">Numbered pins are our stops; gray pins are marinas &amp; scenic spots (not overnight stops). Route lines trace the lake's navigable water from real shoreline data — actual boat paths, not straight lines — so the water miles run longer than they look. Cove anchors are still suggested zones we'll pin down on the water (State Dock staff know which coves are quiet vs. packed that weekend).</p>
 
   <div class="day-key">
     <div class="day-key-item"><span class="day-swatch" style="background:var(--thu)"></span> Thu — board &amp; disappear</div>
@@ -181,8 +181,8 @@
       <div class="day-label"><div class="day-dow">Sat</div><div class="day-date">Aug 9</div></div>
       <div class="day-content">
         <h4>Float day + the marina test</h4>
-        <p>Big lazy swim-and-float day off the back of the boat. Drift back north toward the dock and, if we're curious, swing through <strong>Harmon Creek</strong> — the lake's big raft-up party cove — and/or grab a boat-in meal at a marina. Now we've seen both sides.</p>
-        <p>Last night we anchor at <strong>Beaver Creek</strong>: quiet, cliff-lined, and it's the fuel + pump-out marina — so we top off here and it's an easy morning cruise back Sunday.</p>
+        <p>Big lazy swim-and-float day off the back of the boat, then the cruise east to <strong>Beaver Creek</strong>. This is the marina side of our test — tie up near the marina scene for the evening, or tuck into one of Beaver Creek's quiet, cliff-lined coves. (The big party cove, Harmon Creek, is a long haul up the main lake — easy to skip.)</p>
+        <p>Beaver Creek is also the fuel + pump-out marina, so we top off here for an easy morning cruise home Sunday.</p>
       </div>
     </div>
 
@@ -231,10 +231,10 @@
     { id:'fri', ll:[36.802,-85.104], label:'3', color:C.fri, big:true,
       title:'Fri Night — Scenic Cove', dayLabel:'Fri · Aug 8', dayColor:C.fri,
       desc:'Anchor a cliff-lined cove near the falls. Bluff jumping here for whoever\'s up for it (nothing crazy). Sunset cookout on the deck.' },
-    { id:'harmon', ll:[36.9130,-84.9290], label:'4', color:C.sat, big:true,
-      title:'Harmon Creek — The Party Cove', dayLabel:'Sat · Aug 9 (optional)', dayColor:C.sat,
-      desc:'The lake\'s big raft-up scene — boats tied together, music, going all evening. Cruise through to sample it, or skip it to stay solo.' },
-    { id:'beaver', ll:[36.8620,-84.9790], label:'5', color:C.sat, big:true,
+    { id:'harmon', ll:[36.9130,-84.9290], label:'🎉', color:'#6b7280', big:false,
+      title:'Harmon Creek — The Party Cove', dayLabel:'Off-route', dayColor:'#6b7280',
+      desc:'The lake\'s big raft-up scene — boats tied together, music into the night. It\'s a long haul up the main lake from our route, so it\'s easy to skip and stay secluded — or make the run if you\'re curious.' },
+    { id:'beaver', ll:[36.8620,-84.9790], label:'4', color:C.sat, big:true,
       title:'Beaver Creek — Last Night + Fuel', dayLabel:'Sat · Aug 9', dayColor:C.sat,
       desc:'Quiet and calm even on peak weekends, with cliff-lined limestone shores — this is our bluff-jumping spot for whoever\'s up for it. Also the fuel + pump-out marina, so we top off here for the easy Sunday cruise home.' },
     { id:'jamestown', ll:[36.9383,-85.0478], label:'⚓', color:'#6b7280', big:false,
@@ -281,16 +281,21 @@
       .bindPopup(`<span class="pop-day" style="background:${s.dayColor}">${s.dayLabel}</span><b>${s.title}</b>${s.desc}`);
   });
 
-  // --- Day route lines ---
+  // --- Day route lines (traced along the lake's navigable water from OSM shoreline data) ---
   const P = Object.fromEntries(stops.map(s => [s.id, s.ll]));
   function line(pts, color, dashed) {
     L.polyline(pts, { color, weight: 4, opacity: 0.85, dashArray: dashed ? '2,9' : null, lineCap: 'round' }).addTo(map);
   }
-  line([P.dock, P.thu], C.thu);                    // Thu
-  line([P.thu, P.falls, P.fri], C.fri);            // Fri
-  line([P.fri, P.beaver], C.sat);                  // Sat (main)
-  line([P.beaver, P.harmon], C.sat, true);         // Sat (optional party-cove spur)
-  line([P.beaver, P.dock], C.sun);                 // Sun
+  const ROUTES = {
+    thu: [[36.9155,-85.0505],[36.917,-85.052],[36.9195,-85.0535],[36.922,-85.0535],[36.931,-85.042],[36.93,-85.0405],[36.915,-85.0285],[36.9115,-85.027],[36.8845,-85.067],[36.8825,-85.0745],[36.883,-85.075],[36.889,-85.075],[36.892,-85.072]],
+    fri: [[36.892,-85.072],[36.889,-85.075],[36.879,-85.085],[36.849,-85.1215],[36.816,-85.114],[36.807,-85.113],[36.7875,-85.1125],[36.787,-85.1185],[36.784,-85.123],[36.78,-85.126],[36.7875,-85.1195],[36.7875,-85.1125],[36.802,-85.1095],[36.8025,-85.107],[36.8025,-85.1055],[36.802,-85.104]],
+    sat: [[36.802,-85.104],[36.8025,-85.1055],[36.805,-85.1075],[36.833,-85.118],[36.8495,-85.1215],[36.8685,-85.0715],[36.872,-85.0605],[36.869,-85.0235],[36.8645,-85.0185],[36.8585,-84.9985],[36.8625,-84.989],[36.862,-84.979]],
+    sun: [[36.862,-84.979],[36.8625,-84.9945],[36.8585,-84.999],[36.865,-85.0195],[36.872,-85.038],[36.879,-85.0385],[36.8985,-85.039],[36.9115,-85.027],[36.916,-85.029],[36.931,-85.0415],[36.9305,-85.043],[36.922,-85.0535],[36.919,-85.0535],[36.917,-85.052],[36.9155,-85.0505]],
+  };
+  line(ROUTES.thu, C.thu);   // Thu — board & evening cruise to a quiet cove
+  line(ROUTES.fri, C.fri);   // Fri — down to 76 Falls and back to a scenic cove
+  line(ROUTES.sat, C.sat);   // Sat — across to Beaver Creek
+  line(ROUTES.sun, C.sun);   // Sun — cruise home to State Dock
 
   // Fit to the core route (leave Clifty off-frame; it's the far optional)
   const core = ['dock','jamestown','thu','falls','fri','harmon','beaver','sidbell','mystery','dam'].map(id => P[id]);
