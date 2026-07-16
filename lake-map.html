@@ -148,7 +148,7 @@
   </p>
 
   <div id="map"></div>
-  <p class="map-note">Route lines are straight-line sketches, not exact boat paths. Cove anchors are suggested zones — we'll pick the actual spot on the water (and State Dock staff will know which coves are quiet vs. packed that weekend).</p>
+  <p class="map-note">Numbered pins are our stops; gray pins are marinas &amp; scenic spots along the way (not overnight stops). Route lines are straight-line sketches, not exact boat paths, and cove anchors are suggested zones — we'll pick the actual spot on the water (and State Dock staff will know which coves are quiet vs. packed that weekend).</p>
 
   <div class="day-key">
     <div class="day-key-item"><span class="day-swatch" style="background:var(--thu)"></span> Thu — board &amp; disappear</div>
@@ -236,13 +236,16 @@
       desc:'The lake\'s big raft-up scene — boats tied together, music, going all evening. Cruise through to sample it, or skip it to stay solo.' },
     { id:'beaver', ll:[36.8620,-84.9790], label:'5', color:C.sat, big:true,
       title:'Beaver Creek — Last Night + Fuel', dayLabel:'Sat · Aug 9', dayColor:C.sat,
-      desc:'Quiet, steep cliffs, calm even on peak weekends. Also the fuel + pump-out marina — top off here so Sunday\'s return cruise is easy.' },
+      desc:'Quiet and calm even on peak weekends, with cliff-lined limestone shores — this is our bluff-jumping spot for whoever\'s up for it. Also the fuel + pump-out marina, so we top off here for the easy Sunday cruise home.' },
+    { id:'jamestown', ll:[36.9383,-85.0478], label:'⚓', color:'#6b7280', big:false,
+      title:'Jamestown Marina (Safe Harbor)', dayLabel:'Marina', dayColor:'#6b7280',
+      desc:'Full-service marina just up the shore from State Dock — fuel, ship store, restaurant. Handy backup for a supply run.' },
+    { id:'mystery', ll:[36.8240,-84.9386], label:'💧', color:'#6b7280', big:false,
+      title:'Mystery Falls', dayLabel:'Scenic', dayColor:'#6b7280',
+      desc:'A ~50-ft waterfall hidden in a short cove, reachable only by boat. A quieter second-waterfall option on the Beaver Creek side of the lake.' },
     { id:'dam', ll:[36.8665,-85.1450], label:'🏞', color:'#6b7280', big:false,
-      title:'Wolf Creek Dam', dayLabel:'Landmark', dayColor:'#6b7280',
+      title:'Wolf Creek Dam', dayLabel:'Scenic', dayColor:'#6b7280',
       desc:'The dam that made the lake — marks the west end right by State Dock. Scenic orientation point, not a stop.' },
-    { id:'clifty', ll:[37.0240,-84.7065], label:'🧗', color:'#94a3b8', big:false,
-      title:'Clifty Creek (optional)', dayLabel:'Only if...', dayColor:'#94a3b8',
-      desc:'The lake\'s known cliff-jumping bluffs — but ~20 lake miles up from State Dock. Only worth it if we want to burn a day cruising up-lake. Otherwise our own coves have plenty of bluffs.' },
   ];
 
   // --- Map ---
@@ -288,7 +291,7 @@
   line([P.beaver, P.dock], C.sun);                 // Sun
 
   // Fit to the core route (leave Clifty off-frame; it's the far optional)
-  const core = ['dock','thu','falls','fri','harmon','beaver','dam'].map(id => P[id]);
+  const core = ['dock','jamestown','thu','falls','fri','harmon','beaver','mystery','dam'].map(id => P[id]);
   map.fitBounds(L.latLngBounds(core), { padding: [40, 40] });
 
   // --- Build the stop legend from the same data ---
