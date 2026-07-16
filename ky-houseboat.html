@@ -96,6 +96,14 @@
     .step-body p { font-size: 0.78rem; color: var(--text-2); line-height: 1.45; }
     .step-link { font-size: 0.72rem; color: var(--accent); text-decoration: none; }
     .step-link:hover { text-decoration: underline; }
+    .step.done .step-num { background: #16a34a; }
+    .step.done .step-body h4 { color: var(--text-3); }
+    .step.done .step-body h4::after {
+      content: "Done"; margin-left: 8px;
+      font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: #16a34a; background: #dcfce7; border-radius: 4px; padding: 2px 6px; vertical-align: middle;
+    }
+    .step.done .step-body p { color: var(--text-3); }
 
     /* Cost breakdown */
     .cost-row {
@@ -197,24 +205,48 @@
   </div>
 
   <div class="section-card">
+    <div class="section-title">Itinerary</div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Wed</div><div class="day-date">Aug 6</div></div>
+      <div class="day-content"><h4>Early crew — Nashville night</h4><p>The early group flies DTW→BNA and does a Nashville night on Broadway (separate plan). Everyone converges at the lake Thursday.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Thu</div><div class="day-date">Aug 7</div></div>
+      <div class="day-content"><h4>Board &amp; disappear · Night 1</h4><p>Drive to State Dock (~2.5 hrs), check in ~3pm, load ice/food/drinks at the Ship Store, and get off the dock before the 6pm cutoff. Short cruise to a quiet cove near the dam — tie off, grill dinner. Night 1 is pure seclusion — the cove side of our cove-vs-marina test.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Fri</div><div class="day-date">Aug 8</div></div>
+      <div class="day-content"><h4>Adventure by day, marina test · Night 2</h4><p>Waterfalls and bluff jumping during the day. In the evening we tie up near a marina for the busy, social scene — this is the marina side of our test, run on <strong>night 2</strong> on purpose so our last night stays whatever we decide we want. Harmon Creek, the big party cove, is marked on the map if anyone's curious — but it's a long haul, easy to skip.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Sat</div><div class="day-date">Aug 9</div></div>
+      <div class="day-content"><h4>Float day + our last night · Night 3</h4><p>Big lazy swim-and-float day off the back of the boat. Having sampled both sides by now, we commit the final night to whichever we liked best — most likely a quiet, secluded cove. Top off fuel so Sunday's an easy cruise home.</p></div>
+    </div>
+    <div class="day">
+      <div class="day-label"><div class="day-dow">Sun</div><div class="day-date">Aug 10</div></div>
+      <div class="day-content"><h4>Return boat — fly home</h4><p>Short morning cruise back to State Dock, return the boat by 11am, drive to BNA, fly home.</p></div>
+    </div>
+  </div>
+
+  <div class="section-card">
     <div class="section-title">Booking Steps</div>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
+      <div class="step done">
+        <div class="step-num">✓</div>
         <div class="step-body">
           <h4>Book flights</h4>
           <p>Detroit (DTW) → Nashville (BNA). Target Wednesday Aug 6 outbound, Sunday Aug 10 return. Book early — August weekends fill fast. <a class="step-link" href="https://www.google.com/travel/flights/s/JeKRkXQPaHAzTifBA" target="_blank">Search flights →</a></p>
         </div>
       </div>
-      <div class="step">
-        <div class="step-num">2</div>
+      <div class="step done">
+        <div class="step-num">✓</div>
         <div class="step-body">
           <h4>Reserve the houseboat</h4>
           <p>Book directly through State Dock. Confirm Aug 7–10 (Thu pickup, Sun return). Deposit required at booking. Apply coupon <strong>save25fun</strong> at checkout. <a class="step-link" href="https://statedock.suntexwatersports.com/details/1532?departure=08/06/2026&time_period=6800&time_id=6457_1#search_heading" target="_blank">View this boat →</a></p>
         </div>
       </div>
-      <div class="step">
-        <div class="step-num">3</div>
+      <div class="step done">
+        <div class="step-num">✓</div>
         <div class="step-body">
           <h4>Book Nashville hotel</h4>
           <p>One night Wed Aug 6 — downtown near Broadway. Split 5 ways. Book somewhere with easy parking for the drive out Thursday.</p>
@@ -247,30 +279,6 @@
     <div class="cost-row"><span class="cost-label">Food & drinks (est.)</span><span class="cost-val">~$100–150</span></div>
     <div class="cost-row total"><span class="cost-label">Total per person (est.)</span><span class="cost-val">~$825–980</span></div>
     <p class="cost-note">* Lock in flights first — that's the biggest variable. Discount season runs Aug 3–27 so we're in the right window.</p>
-  </div>
-
-  <div class="section-card">
-    <div class="section-title">Itinerary</div>
-    <div class="day">
-      <div class="day-label"><div class="day-dow">Wed</div><div class="day-date">Aug 6</div></div>
-      <div class="day-content"><h4>Early crew — Nashville night</h4><p>The early group flies DTW→BNA and does a Nashville night on Broadway (separate plan). Everyone converges at the lake Thursday.</p></div>
-    </div>
-    <div class="day">
-      <div class="day-label"><div class="day-dow">Thu</div><div class="day-date">Aug 7</div></div>
-      <div class="day-content"><h4>Board &amp; disappear</h4><p>Drive to State Dock (~2.5 hrs), check in ~3pm, load ice/food/drinks at the Ship Store, and get off the dock before the 6pm cutoff. Short cruise to a quiet cove near the dam — tie off, grill dinner. Night 1 is pure seclusion.</p></div>
-    </div>
-    <div class="day">
-      <div class="day-label"><div class="day-dow">Fri</div><div class="day-date">Aug 8</div></div>
-      <div class="day-content"><h4>Adventure day — 76 Falls</h4><p>Cruise to Seventy-Six Falls, a houseboat-accessible waterfall — swim and explore (don't jump the falls, they're slick and dangerous). Cliff-jumping off the bluffs by our cove for whoever's up for it. Sunset cookout.</p></div>
-    </div>
-    <div class="day">
-      <div class="day-label"><div class="day-dow">Sat</div><div class="day-date">Aug 9</div></div>
-      <div class="day-content"><h4>Float day + marina test</h4><p>Lazy swim-and-float day off the back. Drift north and sample the busier scene — cruise Harmon Creek (the party cove) and/or a boat-in marina meal. Last night anchored at Beaver Creek, where we fuel up for the run home.</p></div>
-    </div>
-    <div class="day">
-      <div class="day-label"><div class="day-dow">Sun</div><div class="day-date">Aug 10</div></div>
-      <div class="day-content"><h4>Return boat — fly home</h4><p>Short morning cruise from Beaver Creek back to State Dock, return the boat by 11am, drive to BNA, fly home.</p></div>
-    </div>
   </div>
 
   <div class="section-card">
